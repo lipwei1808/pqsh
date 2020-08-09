@@ -5,7 +5,7 @@ This is [Project 01] of [CSE.30341.FA20].
 ## Students
 
 - Domer McDomerson (dmcdomer@nd.edu)
-- Belle Fleur (bfleur@nd.ed)
+- Belle Fleur (bfleur@nd.edu)
 
 ## Brainstorming
 
