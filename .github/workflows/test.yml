@@ -8,8 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest    
-    container: pbui/cse-30341-fa20-project01
+    runs-on: [linux]
     steps:
     - uses: actions/checkout@v2
 
