@@ -11,6 +11,8 @@
  **/
 void        queue_push(Queue *q, Process *p) {
     /* TODO: Implement */
+    q->tail->next = p;
+    (q->size)++;
 }
 
 /**
@@ -20,7 +22,13 @@ void        queue_push(Queue *q, Process *p) {
  **/
 Process *   queue_pop(Queue *q) {
     /* TODO: Implement */
-    return NULL;
+    Process* curr = q->head;
+    if (!curr)  {
+        return NULL;
+    }
+
+    q->head = curr->next;
+    return curr->next;
 }
 
 /**
@@ -31,7 +39,21 @@ Process *   queue_pop(Queue *q) {
  **/
 Process *   queue_remove(Queue *q, pid_t pid) {
     /* TODO: Implement */
-    return NULL;
+    Process* curr = q->head;
+    if (!curr) {
+        return NULL;
+    }
+
+    while (curr->next && curr->next->pid != pid) {
+        curr = curr->next;
+    }
+
+    if (!curr->next) {
+        return NULL;
+    }
+    Process* toRemove = curr->next;
+    curr->next = curr->next->next;
+    return toRemove;
 }
 
 /**
