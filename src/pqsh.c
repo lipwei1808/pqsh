@@ -27,8 +27,16 @@ void help() {
     printf("  exit|quit         Exit shell.\n");
 }
 
-/* Main Execution */
 
+/* Main Execution */
+#define TESTING 1
+#if TESTING
+int main() {
+    Process* process = process_create("testing");
+    printf("String: %s\n", process->command);
+}
+
+#else
 int main(int argc, char *argv[]) {
     Scheduler *s = &PQShellScheduler;
 
@@ -63,3 +71,5 @@ int main(int argc, char *argv[]) {
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */
+
+#endif

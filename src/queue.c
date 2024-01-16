@@ -26,7 +26,6 @@ Process *   queue_pop(Queue *q) {
     if (!curr)  {
         return NULL;
     }
-
     q->head = curr->next;
     return curr->next;
 }

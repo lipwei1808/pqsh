@@ -6,6 +6,7 @@
 
 #include <errno.h>
 #include <limits.h>
+#include <stdio.h>
 #include <signal.h>
 #include <string.h>
 #include <unistd.h>
@@ -17,7 +18,14 @@
  **/
 Process *process_create(const char *command) {
     /* TODO: Implement */
-    return NULL;
+    // Allocates space on the heap to fit a Process and returns a pointer 
+    // to that memory address.
+    Process* process = (Process*) malloc(sizeof (struct Process));
+    if (process == NULL) {
+        return NULL;
+    }
+    strncat(process->command, command, BUFSIZ - 1);
+    return process;
 }
 
 /**
