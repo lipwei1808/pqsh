@@ -31,6 +31,7 @@ Process *   process_create(const char *command);
 bool        process_start(Process *p);
 bool        process_pause(Process *p);
 bool        process_resume(Process *p);
+bool handle_child(Process *p);
 
 #endif
 

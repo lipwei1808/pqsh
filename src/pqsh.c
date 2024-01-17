@@ -32,8 +32,9 @@ void help() {
 #define TESTING 1
 #if TESTING
 int main() {
-    Process* process = process_create("testing");
-    printf("String: %s\n", process->command);
+    Process* p = process_create("le");
+    process_start(p);
+    free(p);
 }
 
 #else
