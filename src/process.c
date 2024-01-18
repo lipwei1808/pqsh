@@ -13,7 +13,6 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-int pid_count = 0;
 /**
  * Create new process structure given command.
  * @param   command     String with command to execute.
@@ -28,8 +27,7 @@ Process *process_create(const char *command) {
         return NULL;
     }
     strncat(process->command, command, BUFSIZ - 1);
-    process->pid = pid_count;
-    pid_count++;
+    process->pid = -1;
 
     double time = getTime();
     if (time == -1) {
@@ -64,6 +62,10 @@ bool handle_child(Process* p) {
  * @return  Whether or not starting the process was successful
  **/
 bool process_start(Process *p) {
+    if (p->pid != -1) {
+        printf("Error trying to start process that has already started (pid=%d)\n", p->pid);
+        return false;
+    }
     pid_t pid = fork();
     switch (pid) {
         // error
@@ -83,6 +85,7 @@ bool process_start(Process *p) {
                 }
                 return false;
             }
+            p->pid = pid;
             p->start_time = time;
             /* TODO: Implement */
             return true;
@@ -96,8 +99,13 @@ bool process_start(Process *p) {
  * @return  Whether or not sending the signal was successful.
  **/
 bool process_pause(Process *p) {
-    /* TODO: Implement */
-    return false;
+    if (p->pid == -1) {
+        printf("Invalid process pid to pause\n");
+        return false;
+    }
+
+    kill(p->pid, SIGSTOP);
+    return true;
 }
 
 /**
@@ -106,8 +114,13 @@ bool process_pause(Process *p) {
  * @return  Whether or not sending the signal was successful.
  **/
 bool process_resume(Process *p) {
-    /* TODO: Implement */
-    return false;
+    if (p->pid == -1) {
+        printf("Invalid process pid to resume\n");
+        return false;
+    }
+
+    kill(p->pid, SIGCONT);
+    return true;
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

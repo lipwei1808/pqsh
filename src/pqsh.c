@@ -9,6 +9,8 @@
 #include <string.h>
 #include <sys/time.h>
 
+#include<unistd.h>
+
 /* Global Variables */
 
 Scheduler PQShellScheduler = {
@@ -32,9 +34,37 @@ void help() {
 #define TESTING 1
 #if TESTING
 int main() {
-    Process* p = process_create("le");
-    process_start(p);
-    free(p);
+    while (true) {
+        char input[20];
+        scanf("%s", input);
+        printf("Your input: %s\n", input);
+        if (input == "bye") {
+            return 0;
+        }
+        Process *p = process_create(input);
+        printf("Process created with pid=%d\n", p->pid);
+        bool res = process_start(p);
+        if (!res) {
+            printf("Failed to start process\n");
+            return 1;
+        }
+        printf("Started process with pid: %d\n", p->pid);
+        sleep(1);
+        res = process_pause(p);
+        if (!res) {
+            printf("Failed to sleep process with pid: %d\n", p->pid);
+        } else {
+            printf("Successfully paused process with pid=%d\n", p->pid);
+        }
+        sleep(5);
+        res = process_resume(p);
+        if (!res) {
+            printf("Failed to resume process with pid: %d\n", p->pid);
+        } else {
+            printf("Successfully resumed process with pid=%d\n", p->pid);
+        }
+
+    }
 }
 
 #else
