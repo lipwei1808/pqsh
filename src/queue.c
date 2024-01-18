@@ -11,7 +11,13 @@
  **/
 void        queue_push(Queue *q, Process *p) {
     /* TODO: Implement */
-    q->tail->next = p;
+    if (q->size == 0) {
+        q->head = p;
+        q->tail = p;
+    } else {
+        q->tail->next = p;
+        q->tail = p;
+    }
     (q->size)++;
 }
 
@@ -22,12 +28,20 @@ void        queue_push(Queue *q, Process *p) {
  **/
 Process *   queue_pop(Queue *q) {
     /* TODO: Implement */
-    Process* curr = q->head;
-    if (!curr)  {
+    if (q->size == 0) {
         return NULL;
     }
-    q->head = curr->next;
-    return curr->next;
+
+    Process* p = q->head;
+    if (q->size == 1) {
+        q->head = NULL;
+        q->tail = NULL;
+        q->size = 0;
+        return p;
+    }
+    q->size = q->size - 1;
+    q->head = p->next;
+    return p;
 }
 
 /**

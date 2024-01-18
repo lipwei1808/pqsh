@@ -28,7 +28,6 @@ Process *process_create(const char *command) {
     }
     strncat(process->command, command, BUFSIZ - 1);
     process->pid = -1;
-
     double time = getTime();
     if (time == -1) {
         free(process);

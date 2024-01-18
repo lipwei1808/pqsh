@@ -68,25 +68,26 @@ void scheduler_wait(Scheduler *s) {
      *  - Update Scheduler metrics.
      **/
     pid_t pid;
-    while (pid = waitpid(-1, NULL, NULL) > 0) {
+    while ((pid = waitpid(-1, NULL, WNOHANG)) > 0) {
        Process *found = queue_remove(&s->running, pid);
+       printf("[%d]: A process has terminated and being moved to finish queue", pid);
        queue_push(&s->finished, found);
     }
 }
 
 void scheduler_print(Scheduler *s) {
     printf("======Scheduler Settings: %p======\n", s);
-    printf("Policy: %s\n", s->policy);
-    printf("Cores: %d\n", s->cores);
-    printf("Timeout: %d\n", s->timeout);
+    printf("Policy: %u\n", s->policy);
+    printf("Cores: %zu\n", s->cores);
+    printf("Timeout: %ld\n", s->timeout);
 
-    printf("Running: %d\n", s->running.size);
-    printf("Waiting: %d\n", s->waiting.size);
-    printf("Finished: %d\n", s->finished.size);
+    printf("Running: %zu\n", s->running.size);
+    printf("Waiting: %zu\n", s->waiting.size);
+    printf("Finished: %zu\n", s->finished.size);
 
-    printf("%d\n", s->total_response_time);
-    printf("Turnaround time: %d\n", s->total_turnaround_time);
-    printf("Response time: %d\n", s->total_response_time);
+    printf("Turnaround time: %f\n", s->total_turnaround_time);
+    printf("Response time: %f\n", s->total_response_time);
+    printf("========================\n");
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

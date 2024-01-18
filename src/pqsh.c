@@ -50,9 +50,10 @@ int main() {
         .total_turnaround_time = 90,
         .total_response_time = 0,
     };
-    printf("%p, %d\n", &s, s.total_response_time);
     scheduler_print(&s);
+
     while (true) {
+        scheduler_wait(&s);
         char input[20];
         printf(">PQSH ");
         scanf("%s", input);
@@ -61,6 +62,7 @@ int main() {
             return 0;
         }
         scheduler_add(&s, stdout, input);
+        scheduler_fifo(&s);
     }
 }
 

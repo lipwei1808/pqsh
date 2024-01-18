@@ -26,9 +26,12 @@ void scheduler_fifo(Scheduler *s) {
 
     Queue waiting = s->waiting;
     Queue running = s->running;
-    Process* p = queue_pop(&waiting);
+    Process* p = queue_pop(&s->waiting);
+    if (p == NULL) {
+        return;
+    }
     process_start(p);
-    queue_push(&running, p);
+    queue_push(&s->running, p);
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */
