@@ -16,6 +16,19 @@
  */
 void scheduler_fifo(Scheduler *s) {
     /* TODO: Implement FIFO Policy */
+    if (s->running.size >= s->cores) {
+        return;
+    }
+
+    if (s->waiting.size <= 0) {
+        return;
+    }
+
+    Queue waiting = s->waiting;
+    Queue running = s->running;
+    Process* p = queue_pop(&waiting);
+    process_start(p);
+    queue_push(&running, p);
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

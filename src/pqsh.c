@@ -34,36 +34,33 @@ void help() {
 #define TESTING 1
 #if TESTING
 int main() {
+    
+    Queue running = {.head = NULL, .tail = NULL, .size = 0};
+    Queue waiting = {.head = NULL, .tail = NULL, .size = 0};
+    Queue finished = {.head = NULL, .tail = NULL, .size = 0};
+    Scheduler s = {
+        .policy = FIFO_POLICY,
+        .cores = 1,
+        .timeout = 60,
+
+        .running = running,
+        .waiting = waiting,
+        .finished = finished,
+
+        .total_turnaround_time = 90,
+        .total_response_time = 0,
+    };
+    printf("%p, %d\n", &s, s.total_response_time);
+    scheduler_print(&s);
     while (true) {
         char input[20];
+        printf(">PQSH ");
         scanf("%s", input);
         printf("Your input: %s\n", input);
-        if (input == "bye") {
+        if (strcmp(input, "bye") == 0) {
             return 0;
         }
-        Process *p = process_create(input);
-        printf("Process created with pid=%d\n", p->pid);
-        bool res = process_start(p);
-        if (!res) {
-            printf("Failed to start process\n");
-            return 1;
-        }
-        printf("Started process with pid: %d\n", p->pid);
-        sleep(1);
-        res = process_pause(p);
-        if (!res) {
-            printf("Failed to sleep process with pid: %d\n", p->pid);
-        } else {
-            printf("Successfully paused process with pid=%d\n", p->pid);
-        }
-        sleep(5);
-        res = process_resume(p);
-        if (!res) {
-            printf("Failed to resume process with pid: %d\n", p->pid);
-        } else {
-            printf("Successfully resumed process with pid=%d\n", p->pid);
-        }
-
+        scheduler_add(&s, stdout, input);
     }
 }
 

@@ -53,6 +53,8 @@ void    scheduler_wait(Scheduler *s);
 void    scheduler_fifo(Scheduler *s);
 void    scheduler_rdrn(Scheduler *s);
 
+void    scheduler_print(Scheduler *s);
+
 #endif
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */
