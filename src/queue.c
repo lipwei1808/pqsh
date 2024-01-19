@@ -92,9 +92,19 @@ Process *   queue_remove(Queue *q, pid_t pid) {
  * @param fs    Output file stream.
  **/
 void        queue_dump(Queue *q, FILE *fs) {
+    if (q->size == 0) {
+        return;
+    }
+
     fprintf(fs, "%6s %-30s %-13s %-13s %-13s\n", 
                 "PID", "COMMAND", "ARRIVAL", "START", "END");
     /* TODO: Display information for each item in Queue. */
+    Process* cur = q->head;
+    while (cur != NULL) {
+        fprintf(fs, "%6d %-30s %-13.2f %-13.2f %-13.2f\n",
+                cur->pid, cur->command, cur->arrival_time, cur->start_time, cur->end_time);
+        cur = cur->next;
+    }
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

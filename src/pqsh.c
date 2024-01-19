@@ -7,6 +7,7 @@
 
 #include <errno.h>
 #include <string.h>
+#include <stdlib.h>
 #include <sys/time.h>
 
 #include<unistd.h>
@@ -106,7 +107,6 @@ int main(int argc, char *argv[]) {
             token = strtok(NULL, " ");
         }
 
-        printf("COMMAND: [%s], ARGUMENT: [%s]\n", command, argument);
         /* TODO: Handle add and status commands */
         if (streq(command, "help")) {
             help();
@@ -116,7 +116,7 @@ int main(int argc, char *argv[]) {
             scheduler_add(s, stdout, argument);
             scheduler_fifo(s); 
         } else if (streq(command, "status")) {
-            scheduler_status(s, stdout, 0);
+            scheduler_status(s, stdout, atoi(argument));
         } else if (strlen(command)) {
             printf("Unknown command: %s\n", command);
         }

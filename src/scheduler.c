@@ -35,6 +35,31 @@ void scheduler_status(Scheduler *s, FILE *fs, int queue) {
     fprintf(fs, "Running = %4lu, Waiting = %4lu, Finished = %4lu, Turnaround = %05.2lf, Response = %05.2lf\n",
             s->running.size, s->waiting.size, s->finished.size, s->total_turnaround_time, s-> total_response_time);
     /* TODO: Complement implementation. */
+    switch (queue) {
+        case RUNNING: {
+            printf("\nRunning Queue:\n");
+            queue_dump(&s->running, fs);
+            break;
+        }
+        case WAITING: {
+            printf("\nWaiting Queue:\n");
+            queue_dump(&s->waiting, fs);
+            break;
+        }
+        case FINISHED: {
+            printf("\nFinished Queue:\n");
+            queue_dump(&s->finished, fs);
+            break;
+        }
+        default: {
+            printf("\nRunning Queue:\n");
+            queue_dump(&s->running, fs);
+            printf("\nWaiting Queue:\n");
+            queue_dump(&s->waiting, fs);
+            printf("\nFinished Queue:\n");
+            queue_dump(&s->finished, fs);
+        }
+    }
 }
 
 /**
