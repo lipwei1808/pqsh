@@ -2,6 +2,7 @@
 
 #include "pqsh/timestamp.h"
 
+#include <stdio.h>
 #include <time.h>
 #include <sys/time.h>
 
@@ -16,7 +17,12 @@
  **/
 double timestamp() {
     /* TODO: Implement */
-    return 0;
+    struct timeval tv;
+    if (gettimeofday(&tv, NULL) < 0) {
+        printf("Error getting time of day\n");
+        return -1;
+    }
+    return tv.tv_sec;
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

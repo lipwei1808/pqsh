@@ -3,7 +3,6 @@
 #include "pqsh/macros.h"
 #include "pqsh/process.h"
 #include "pqsh/timestamp.h"
-#include "pqsh/util.h"
 
 #include <errno.h>
 #include <limits.h>
@@ -28,7 +27,7 @@ Process *process_create(const char *command) {
     }
     strncat(process->command, command, BUFSIZ - 1);
     process->pid = -1;
-    double time = getTime();
+    double time = timestamp();
     if (time == -1) {
         free(process);
         printf("Error getting time\n");
@@ -77,7 +76,7 @@ bool process_start(Process *p) {
         }
         // parent process
         default: {
-            double time = getTime();
+            double time = timestamp();
             if (time == -1) {
                 if (kill(pid, SIGKILL) == -1) {
                     printf("Failed to kill child process!\n");
