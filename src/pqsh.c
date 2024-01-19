@@ -15,7 +15,7 @@
 
 Scheduler PQShellScheduler = {
     .policy    = FIFO_POLICY,
-    .cores     = 1,
+    .cores     = 2,
     .timeout   = 250000,
 };
 
@@ -29,6 +29,11 @@ void help() {
     printf("  exit|quit         Exit shell.\n");
 }
 
+void child_handler(int v) {
+    printf("SIGCHLD Handler invoked %d\n", v);
+    scheduler_wait(&PQShellScheduler);
+}
+
 
 /* Main Execution */
 #define TESTING 1
@@ -38,22 +43,16 @@ int main() {
     Queue running = {.head = NULL, .tail = NULL, .size = 0};
     Queue waiting = {.head = NULL, .tail = NULL, .size = 0};
     Queue finished = {.head = NULL, .tail = NULL, .size = 0};
-    Scheduler s = {
-        .policy = FIFO_POLICY,
-        .cores = 1,
-        .timeout = 60,
 
-        .running = running,
-        .waiting = waiting,
-        .finished = finished,
+    PQShellScheduler.running = running,
+    PQShellScheduler.waiting = waiting,
+    PQShellScheduler.finished = finished,
 
-        .total_turnaround_time = 90,
-        .total_response_time = 0,
-    };
-    scheduler_print(&s);
-
+    PQShellScheduler.total_turnaround_time = 90,
+    PQShellScheduler.total_response_time = 0,
+    scheduler_print(&PQShellScheduler);
+    signal (SIGCHLD, child_handler);
     while (true) {
-        scheduler_wait(&s);
         char input[20];
         printf(">PQSH ");
         scanf("%s", input);
@@ -61,8 +60,8 @@ int main() {
         if (strcmp(input, "bye") == 0) {
             return 0;
         }
-        scheduler_add(&s, stdout, input);
-        scheduler_fifo(&s);
+        scheduler_add(&PQShellScheduler, stdout, input);
+        scheduler_fifo(&PQShellScheduler);
     }
 }
 

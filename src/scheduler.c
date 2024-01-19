@@ -46,9 +46,11 @@ void scheduler_next(Scheduler *s) {
     switch (s->policy) {
         case FIFO_POLICY: {
             scheduler_fifo(s);
+            break;
         }
         case RDRN_POLICY: {
             scheduler_rdrn(s);
+            break;
         }
         default: {
             printf("Invalid policy\n");
@@ -69,10 +71,17 @@ void scheduler_wait(Scheduler *s) {
      **/
     pid_t pid;
     while ((pid = waitpid(-1, NULL, WNOHANG)) > 0) {
-       Process *found = queue_remove(&s->running, pid);
-       printf("[%d]: A process has terminated and being moved to finish queue", pid);
-       queue_push(&s->finished, found);
+        printf("Removing process (%d) from running queue\n", pid);
+        Process *found = queue_remove(&s->running, pid);
+        if (!found) {
+            printf("Unable to remove process (%d) from running queue\n", pid);
+            return;
+        } else {
+            printf("[%d]: A process has terminated and being moved to finish queue, running queue size=%zu\n", found->pid, s->running.size);
+            queue_push(&s->finished, found);
+        }
     }
+    scheduler_next(s);
 }
 
 void scheduler_print(Scheduler *s) {

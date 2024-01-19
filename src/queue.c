@@ -52,21 +52,38 @@ Process *   queue_pop(Queue *q) {
  **/
 Process *   queue_remove(Queue *q, pid_t pid) {
     /* TODO: Implement */
-    Process* curr = q->head;
-    if (!curr) {
+    if (q->size == 0) {
         return NULL;
     }
 
-    while (curr->next && curr->next->pid != pid) {
+    Process* curr = q->head;
+    if (q->size == 1) {
+        if (q->head->pid != pid) {
+            return NULL;
+        }
+        q->head = NULL;
+        q->tail = NULL;
+        q->size = 0;
+        return curr;
+    }
+
+    Process* parent = NULL;
+    while (curr->pid != pid && curr->next) {
+        parent = curr;
         curr = curr->next;
     }
 
-    if (!curr->next) {
-        return NULL;
+    if (curr->pid == pid) {
+        if (parent == NULL) {
+            q->head = curr->next;
+        } else {
+            parent->next = curr->next;
+        }
+        (q->size)--;
+        return curr;
     }
-    Process* toRemove = curr->next;
-    curr->next = curr->next->next;
-    return toRemove;
+
+    return NULL;
 }
 
 /**

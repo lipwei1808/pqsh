@@ -24,8 +24,6 @@ void scheduler_fifo(Scheduler *s) {
         return;
     }
 
-    Queue waiting = s->waiting;
-    Queue running = s->running;
     Process* p = queue_pop(&s->waiting);
     if (p == NULL) {
         return;
