@@ -1,6 +1,7 @@
 {
   "files.associations": {
     "time.h": "c",
-    "scheduler.h": "c"
+    "scheduler.h": "c",
+    "stdio.h": "c"
   }
 }

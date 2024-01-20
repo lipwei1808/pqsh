@@ -30,12 +30,6 @@ void help() {
     printf("  exit|quit         Exit shell.\n");
 }
 
-void child_handler(int v) {
-    printf("SIGCHLD Handler invoked %d\n", v);
-    scheduler_wait(&PQShellScheduler);
-}
-
-
 /* Main Execution */
 #define TESTING 0
 #if TESTING
@@ -83,9 +77,13 @@ int main(int argc, char *argv[]) {
     /* TODO: Parse command line options */
 
     /* TODO: Register signal handlers */
-    signal (SIGCHLD, child_handler);
+    signal_register(SIGCHLD, SA_RESTART, sigchld_handler);
+    signal_register(SIGALRM, SA_RESTART, sigalrm_handler);
 
     /* TODO: Start timer interrupt */
+    struct timeval time = {.tv_sec = 0, .tv_usec = s->timeout};
+    struct itimerval timer = {.it_interval = time, .it_value = time };
+    setitimer(ITIMER_REAL, &timer, NULL);
 
     /* TODO: Process shell comands */
     while (!feof(stdin)) {

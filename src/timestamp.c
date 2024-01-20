@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <sys/time.h>
+#include <math.h>
 
 /**
  * Return current timestamp as a double.
@@ -22,7 +23,9 @@ double timestamp() {
         printf("Error getting time of day\n");
         return -1;
     }
-    return tv.tv_sec;
+    int microseconds = tv.tv_usec;
+    double res = tv.tv_sec + microseconds * pow(10, -6);
+    return res;
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */
