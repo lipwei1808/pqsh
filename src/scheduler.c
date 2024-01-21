@@ -105,6 +105,7 @@ void scheduler_wait(Scheduler *s) {
         printf("[%d]: A process has terminated and being moved to finish queue, running queue size=%zu\n", found->pid, s->running.size);
         double time = timestamp();
         found->end_time = time;
+        s->total_turnaround_time += (time - found->start_time);
         queue_push(&s->finished, found);
     }
 }

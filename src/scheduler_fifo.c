@@ -28,7 +28,12 @@ void scheduler_fifo(Scheduler *s) {
     if (p == NULL) {
         return;
     }
-    process_start(p);
+    bool res = process_start(p);
+    if (!res) {
+        printf("Erorr starting child process\n");
+        return;
+    }
+    s->total_response_time += (p->start_time - p->arrival_time);
     queue_push(&s->running, p);
 }
 

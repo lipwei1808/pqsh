@@ -16,7 +16,7 @@
 
 Scheduler PQShellScheduler = {
     .policy    = FIFO_POLICY,
-    .cores     = 2,
+    .cores     = 1,
     .timeout   = 250000,
 };
 
