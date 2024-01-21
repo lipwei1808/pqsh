@@ -118,8 +118,9 @@ void queue_cleanup(Queue* q) {
 
     Process* cur = q->head;
     while (cur != NULL) {
+        Process* next = cur->next;
         free(cur);
-        cur = cur->next;
+        cur = next;
     }
 }
 

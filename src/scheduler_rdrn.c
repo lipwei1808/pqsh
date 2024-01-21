@@ -34,6 +34,8 @@ void scheduler_rdrn(Scheduler *s) {
 
     if (toSchedule->pid == 0) {
         process_start(toSchedule);
+        s->total_response_time += (toSchedule->start_time - toSchedule->arrival_time);
+        s->total_started++;
     } else {
         process_resume(toSchedule);
     }

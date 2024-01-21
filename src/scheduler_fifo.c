@@ -34,6 +34,7 @@ void scheduler_fifo(Scheduler *s) {
         return;
     }
     s->total_response_time += (p->start_time - p->arrival_time);
+    s->total_started++;
     queue_push(&s->running, p);
 }
 

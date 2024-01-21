@@ -36,6 +36,7 @@ struct Scheduler {
     /* Total turnaround and response time */
     double  total_turnaround_time;
     double  total_response_time;
+    int     total_started;
 };
 
 /* Commands */

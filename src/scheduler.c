@@ -36,7 +36,7 @@ void scheduler_add(Scheduler *s, FILE *fs, const char *command) {
  **/
 void scheduler_status(Scheduler *s, FILE *fs, int queue) {
     fprintf(fs, "Running = %4lu, Waiting = %4lu, Finished = %4lu, Turnaround = %05.2lf, Response = %05.2lf\n",
-            s->running.size, s->waiting.size, s->finished.size, s->total_turnaround_time, s-> total_response_time);
+            s->running.size, s->waiting.size, s->finished.size, s->total_turnaround_time / s->finished.size, s->total_response_time / s->total_started);
     /* TODO: Complement implementation. */
     switch (queue) {
         case RUNNING: {
@@ -55,12 +55,18 @@ void scheduler_status(Scheduler *s, FILE *fs, int queue) {
             break;
         }
         default: {
-            printf("\nRunning Queue:\n");
-            queue_dump(&s->running, fs);
-            printf("\nWaiting Queue:\n");
-            queue_dump(&s->waiting, fs);
-            printf("\nFinished Queue:\n");
-            queue_dump(&s->finished, fs);
+            if (s->running.size) {
+                printf("\nRunning Queue:\n");
+                queue_dump(&s->running, fs);
+            }
+            if (s->waiting.size) {
+                printf("\nWaiting Queue:\n");
+                queue_dump(&s->waiting, fs);
+            }
+            if (s->finished.size) {
+                printf("\nFinished Queue:\n");
+                queue_dump(&s->finished, fs);
+            }
         }
     }
 }
@@ -108,7 +114,7 @@ void scheduler_wait(Scheduler *s) {
         printf("[%d]: A process has terminated and being moved to finish queue, running queue size=%zu\n", found->pid, s->running.size);
         double time = timestamp();
         found->end_time = time;
-        s->total_turnaround_time += (time - found->start_time);
+        s->total_turnaround_time += (time - found->arrival_time);
         queue_push(&s->finished, found);
     }
 }
