@@ -15,6 +15,9 @@
  * @param   command Command string for new Process.
  **/
 void scheduler_add(Scheduler *s, FILE *fs, const char *command) {
+    if (s == NULL || command == NULL || fs == NULL) {
+        return;
+    }
     /* TODO: Implement */
     Process* p = process_create(command);
     if (p == NULL) {

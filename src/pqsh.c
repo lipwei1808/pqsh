@@ -73,7 +73,9 @@ int main(int argc, char *argv[]) {
 
         // Parse user input into command and arguments
         char* token = strtok(input, " ");
-        strcat(command, token);
+        if (token != NULL) {
+            strcat(command, token);
+        }
         token = strtok(NULL, " ");
         while (token != NULL) {
             strcat(argument, token);

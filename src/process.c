@@ -21,11 +21,26 @@ Process *process_create(const char *command) {
     /* TODO: Implement */
     // Allocates space on the heap to fit a Process and returns a pointer 
     // to that memory address.
+    if (command == NULL) {
+        return NULL;
+    }
+
     Process* process = (Process*) malloc(sizeof (struct Process));
     if (process == NULL) {
         return NULL;
     }
-    strncat(process->command, command, BUFSIZ - 1);
+
+    memset(process->command, 0, BUFSIZ);
+    size_t len = strlen(command);
+    if (len <= 0) {
+        free(process);
+        return NULL;
+    }
+
+    if (strncpy(process->command, command, min(len, BUFSIZ - 1)) < 0) {
+        free(process);
+        return NULL;
+    }
     process->pid = 0;
     double time = timestamp();
     if (time == -1) {
@@ -40,6 +55,7 @@ Process *process_create(const char *command) {
 bool handle_child(Process* p) {
     char* argv[MAX_ARGUMENTS];
     char command[BUFSIZ];
+    
     strcpy(command, p->command);
     int i = 0;
     for (char* token = strtok(command, " "); token; token = strtok(NULL, " ")) {
