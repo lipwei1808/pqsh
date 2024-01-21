@@ -17,7 +17,10 @@ bool    signal_register(int signum, int flags, sighandler_t handler);
 /* Handlers */
 
 void	sigalrm_handler(int signum);
+
+/* DEPRECATED
 void	sigchld_handler(int signum);
+ */
 
 #endif
 

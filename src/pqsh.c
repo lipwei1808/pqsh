@@ -67,17 +67,21 @@ int main(int argc, char *argv[]) {
     Queue running = {.head = NULL, .tail = NULL, .size = 0};
     Queue waiting = {.head = NULL, .tail = NULL, .size = 0};
     Queue finished = {.head = NULL, .tail = NULL, .size = 0};
-    s->running = running,
-    s->waiting = waiting,
-    s->finished = finished,
+    s->running = running;
+    s->waiting = waiting;
+    s->finished = finished;
 
-    s->total_turnaround_time = 0,
-    s->total_response_time = 0,
+    s->total_turnaround_time = 0;
+    s->total_response_time = 0;
 
     /* TODO: Parse command line options */
+    bool parse_success = my_parse(argc, argv, s);
+    if (!parse_success) {
+        return 1;
+    }
+    scheduler_print(s);
 
     /* TODO: Register signal handlers */
-    // signal_register(SIGCHLD, SA_RESTART, sigchld_handler);
     signal_register(SIGALRM, SA_RESTART, sigalrm_handler);
 
     /* TODO: Start timer interrupt */

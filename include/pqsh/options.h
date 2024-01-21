@@ -7,6 +7,7 @@
 
 #include <stdbool.h>
 
+bool my_parse(int argc, char* argv[], Scheduler* s);
 bool parse_command_line_options(int argc, char *argv[], Scheduler *s);
 
 #endif

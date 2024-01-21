@@ -41,10 +41,11 @@ void sigalrm_handler(int signum) {
     scheduler_next(&PQShellScheduler);
 }
 
+/* DEPRECATED 
 void sigchld_handler(int signum) {
     printf("SIGCHLD Handler invoked %d\n", signum);
     scheduler_wait(&PQShellScheduler);
     scheduler_next(&PQShellScheduler);
 }
-
+*/
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */
