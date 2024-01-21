@@ -111,4 +111,16 @@ void        queue_dump(Queue *q, FILE *fs) {
     }
 }
 
+void queue_cleanup(Queue* q) {
+    if (q->size == 0) {
+        return;
+    }
+
+    Process* cur = q->head;
+    while (cur != NULL) {
+        free(cur);
+        cur = cur->next;
+    }
+}
+
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

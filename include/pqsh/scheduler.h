@@ -54,6 +54,7 @@ void    scheduler_fifo(Scheduler *s);
 void    scheduler_rdrn(Scheduler *s);
 
 void    scheduler_print(Scheduler *s);
+void    scheduler_cleanup(Scheduler* s);
 
 #endif
 

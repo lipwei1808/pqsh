@@ -30,56 +30,24 @@ void help() {
     printf("  exit|quit         Exit shell.\n");
 }
 
-/* Main Execution */
-#define TESTING 0
-#if TESTING
-int main() {
-    
-    Queue running = {.head = NULL, .tail = NULL, .size = 0};
-    Queue waiting = {.head = NULL, .tail = NULL, .size = 0};
-    Queue finished = {.head = NULL, .tail = NULL, .size = 0};
-
-    PQShellScheduler.running = running,
-    PQShellScheduler.waiting = waiting,
-    PQShellScheduler.finished = finished,
-
-    PQShellScheduler.total_turnaround_time = 90,
-    PQShellScheduler.total_response_time = 0,
-    scheduler_print(&PQShellScheduler);
-    signal (SIGCHLD, child_handler);
-    while (true) {
-        char input[20];
-        printf(">PQSH ");
-        scanf("%s", input);
-        printf("Your input: %s\n", input);
-        if (strcmp(input, "bye") == 0) {
-            return 0;
-        }
-        scheduler_add(&PQShellScheduler, stdout, input);
-        scheduler_fifo(&PQShellScheduler);
-    }
-}
-
-#else
 int main(int argc, char *argv[]) {
     Scheduler *s = &PQShellScheduler;
 
-    Queue running = {.head = NULL, .tail = NULL, .size = 0};
-    Queue waiting = {.head = NULL, .tail = NULL, .size = 0};
-    Queue finished = {.head = NULL, .tail = NULL, .size = 0};
-    s->running = running;
-    s->waiting = waiting;
-    s->finished = finished;
+    Queue q = {.head = NULL, .tail = NULL, .size = 0};
+    s->running = q;
+    s->waiting = q;
+    s->finished = q;
 
     s->total_turnaround_time = 0;
     s->total_response_time = 0;
+
+    scheduler_print(s);
 
     /* TODO: Parse command line options */
     bool parse_success = my_parse(argc, argv, s);
     if (!parse_success) {
         return 1;
     }
-    scheduler_print(s);
 
     /* TODO: Register signal handlers */
     signal_register(SIGALRM, SA_RESTART, sigalrm_handler);
@@ -122,7 +90,6 @@ int main(int argc, char *argv[]) {
             break;
         } else if (streq(command, "add")) {
             scheduler_add(s, stdout, argument);
-            scheduler_fifo(s); 
         } else if (streq(command, "status")) {
             scheduler_status(s, stdout, atoi(argument));
         } else if (strlen(command)) {
@@ -130,9 +97,8 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    scheduler_cleanup(s);
     return EXIT_SUCCESS;
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */
-
-#endif

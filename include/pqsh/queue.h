@@ -23,6 +23,7 @@ void        queue_push(Queue *q, Process *p);
 Process *   queue_pop(Queue *q);
 Process *   queue_remove(Queue *q, pid_t pid);
 void        queue_dump(Queue *q, FILE *fs);
+void        queue_cleanup(Queue* q);
 
 #endif
 

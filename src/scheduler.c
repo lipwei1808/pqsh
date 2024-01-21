@@ -110,6 +110,12 @@ void scheduler_wait(Scheduler *s) {
     }
 }
 
+void scheduler_cleanup(Scheduler* s) {
+    queue_cleanup(&s->waiting);
+    queue_cleanup(&s->running);
+    queue_cleanup(&s->finished);
+}
+
 void scheduler_print(Scheduler *s) {
     printf("======Scheduler Settings: %p======\n", s);
     printf("Policy: %u\n", s->policy);
