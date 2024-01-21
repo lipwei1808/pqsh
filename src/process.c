@@ -26,7 +26,7 @@ Process *process_create(const char *command) {
         return NULL;
     }
     strncat(process->command, command, BUFSIZ - 1);
-    process->pid = -1;
+    process->pid = 0;
     double time = timestamp();
     if (time == -1) {
         free(process);
@@ -60,7 +60,7 @@ bool handle_child(Process* p) {
  * @return  Whether or not starting the process was successful
  **/
 bool process_start(Process *p) {
-    if (p->pid != -1) {
+    if (p->pid != 0) {
         printf("Error trying to start process that has already started (pid=%d)\n", p->pid);
         return false;
     }
@@ -85,7 +85,7 @@ bool process_start(Process *p) {
             }
             p->pid = pid;
             p->start_time = time;
-            /* TODO: Implement */
+            printf("Staretd child process pid=%d\n", pid);
             return true;
         }
     }
@@ -97,7 +97,7 @@ bool process_start(Process *p) {
  * @return  Whether or not sending the signal was successful.
  **/
 bool process_pause(Process *p) {
-    if (p->pid == -1) {
+    if (p->pid == 0) {
         printf("Invalid process pid to pause\n");
         return false;
     }
@@ -112,7 +112,7 @@ bool process_pause(Process *p) {
  * @return  Whether or not sending the signal was successful.
  **/
 bool process_resume(Process *p) {
-    if (p->pid == -1) {
+    if (p->pid == 0) {
         printf("Invalid process pid to resume\n");
         return false;
     }

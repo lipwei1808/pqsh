@@ -101,14 +101,12 @@ void scheduler_wait(Scheduler *s) {
         if (!found) {
             printf("Unable to remove process (%d) from running queue\n", pid);
             return;
-        } else {
-            printf("[%d]: A process has terminated and being moved to finish queue, running queue size=%zu\n", found->pid, s->running.size);
-            double time = timestamp();
-            found->end_time = time;
-            queue_push(&s->finished, found);
         }
+        printf("[%d]: A process has terminated and being moved to finish queue, running queue size=%zu\n", found->pid, s->running.size);
+        double time = timestamp();
+        found->end_time = time;
+        queue_push(&s->finished, found);
     }
-    scheduler_next(s);
 }
 
 void scheduler_print(Scheduler *s) {

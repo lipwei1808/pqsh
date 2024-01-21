@@ -37,10 +37,12 @@ Process *   queue_pop(Queue *q) {
         q->head = NULL;
         q->tail = NULL;
         q->size = 0;
+        p->next = NULL;
         return p;
     }
     q->size = q->size - 1;
     q->head = p->next;
+    p->next = NULL;
     return p;
 }
 
@@ -64,6 +66,7 @@ Process *   queue_remove(Queue *q, pid_t pid) {
         q->head = NULL;
         q->tail = NULL;
         q->size = 0;
+        curr->next = NULL;
         return curr;
     }
 
@@ -80,6 +83,7 @@ Process *   queue_remove(Queue *q, pid_t pid) {
             parent->next = curr->next;
         }
         (q->size)--;
+        curr->next = NULL;
         return curr;
     }
 

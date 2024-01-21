@@ -37,7 +37,6 @@ bool signal_register(int signum, int flags, sighandler_t handler) {
  **/
 void sigalrm_handler(int signum) {
     /* TODO: Handle timer event. */
-    printf("SIGALRM Handler invoked %d\n", signum);
     scheduler_wait(&PQShellScheduler);
     scheduler_next(&PQShellScheduler);
 }

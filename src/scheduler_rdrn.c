@@ -26,8 +26,18 @@ void scheduler_rdrn(Scheduler *s) {
 
     Process* toSchedule = queue_pop(&s->waiting);
     Process* popped = queue_pop(&s->running);
+    
+    if (popped != NULL) {
+        process_pause(popped);
+        queue_push(&s->waiting, popped);
+    }
+
+    if (toSchedule->pid == 0) {
+        process_start(toSchedule);
+    } else {
+        process_resume(toSchedule);
+    }
     queue_push(&s->running, toSchedule);
-    queue_push(&s->waiting, popped);
 }
 
 /* vim: set expandtab sts=4 sw=4 ts=8 ft=c: */

@@ -77,13 +77,15 @@ int main(int argc, char *argv[]) {
     /* TODO: Parse command line options */
 
     /* TODO: Register signal handlers */
-    signal_register(SIGCHLD, SA_RESTART, sigchld_handler);
+    // signal_register(SIGCHLD, SA_RESTART, sigchld_handler);
     signal_register(SIGALRM, SA_RESTART, sigalrm_handler);
 
     /* TODO: Start timer interrupt */
     struct timeval time = {.tv_sec = 0, .tv_usec = s->timeout};
     struct itimerval timer = {.it_interval = time, .it_value = time };
-    setitimer(ITIMER_REAL, &timer, NULL);
+    if (setitimer(ITIMER_REAL, &timer, NULL) < 0) {
+        printf("Failed to set timer err=%d\n", errno);
+    }
 
     /* TODO: Process shell comands */
     while (!feof(stdin)) {
