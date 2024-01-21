@@ -41,14 +41,13 @@ int main(int argc, char *argv[]) {
     s->total_turnaround_time = 0;
     s->total_response_time = 0;
 
-    scheduler_print(s);
-
     /* TODO: Parse command line options */
     bool parse_success = my_parse(argc, argv, s);
     if (!parse_success) {
         return 1;
     }
 
+    scheduler_print(s);
     /* TODO: Register signal handlers */
     signal_register(SIGALRM, SA_RESTART, sigalrm_handler);
 
