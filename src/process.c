@@ -48,7 +48,7 @@ bool handle_child(Process* p) {
     argv[i] = NULL;
 
     if (execvp(argv[0], argv) == -1) {
-        printf("Failed to execute process: %s\n", p->command);
+        printf("Failed to execute process: %s, err=%d\n", p->command, errno);
         return false;
     }
     return true;

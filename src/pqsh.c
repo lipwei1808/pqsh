@@ -96,6 +96,7 @@ int main(int argc, char *argv[]) {
         char input[BUFSIZ]  = "";
         char command[BUFSIZ]  = "";
         char argument[BUFSIZ] = "";
+        char space[2] = " ";
 
         printf("\nPQSH> ");
 
@@ -109,6 +110,9 @@ int main(int argc, char *argv[]) {
         while (token != NULL) {
             strcat(argument, token);
             token = strtok(NULL, " ");
+            if (token != NULL) {
+                strcat(argument, space);
+            }
         }
 
         /* TODO: Handle add and status commands */
