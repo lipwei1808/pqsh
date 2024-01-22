@@ -82,6 +82,13 @@ Process *   queue_remove(Queue *q, pid_t pid) {
         } else {
             parent->next = curr->next;
         }
+        if (pid == q->tail->pid) {
+            if (parent == NULL) {
+                q->tail = NULL;
+            } else {
+                q->tail = parent;
+            }
+        }
         (q->size)--;
         curr->next = NULL;
         return curr;

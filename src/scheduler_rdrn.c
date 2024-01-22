@@ -25,9 +25,11 @@ void scheduler_rdrn(Scheduler *s) {
     }
 
     Process* toSchedule = queue_pop(&s->waiting);
-    Process* popped = queue_pop(&s->running);
-    
-    if (popped != NULL) {
+    if (s->running.size >= s->cores) {
+        Process* popped = queue_pop(&s->running);
+        if (popped == NULL) {
+            printf("Error removing process from queue in RDRN\n");
+        }
         process_pause(popped);
         queue_push(&s->waiting, popped);
     }

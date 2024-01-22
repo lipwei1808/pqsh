@@ -25,7 +25,6 @@ void scheduler_add(Scheduler *s, FILE *fs, const char *command) {
         return;
     }
     queue_push(&s->waiting, p);
-    fprintf(fs, "Added process \"%s\" to waiting queue.\n", command);
 }
 
 /**
@@ -105,13 +104,11 @@ void scheduler_wait(Scheduler *s) {
      **/
     pid_t pid;
     while ((pid = waitpid(-1, NULL, WNOHANG)) > 0) {
-        printf("Removing process (%d) from running queue\n", pid);
         Process *found = queue_remove(&s->running, pid);
         if (!found) {
             printf("Unable to remove process (%d) from running queue\n", pid);
             return;
         }
-        printf("[%d]: A process has terminated and being moved to finish queue, running queue size=%zu\n", found->pid, s->running.size);
         double time = timestamp();
         found->end_time = time;
         s->total_turnaround_time += (time - found->arrival_time);

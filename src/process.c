@@ -101,7 +101,6 @@ bool process_start(Process *p) {
             }
             p->pid = pid;
             p->start_time = time;
-            printf("Staretd child process pid=%d\n", pid);
             return true;
         }
     }
